@@ -28,3 +28,15 @@ Get all attributes, from a MISP (https://github.com/MISP) instance, that can be 
 * set appropriate value for:
     - misp_url
     - misp_key
+    
+
+# Screenshots
+
+python3 suricata_search.py -p tags -s 'APT' -o misp_ids.rules -t 5
+
+![suricata_search_tag](imgs/suricata_search_tag.png)
+
+
+python3 suricata_search.py -p tags -s 'APT, tlp:green' -o misp_ids.rules -t 5
+
+![suricata_search_tag_x2](imgs/suricata_search_tag_x2.png)

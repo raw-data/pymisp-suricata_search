@@ -4,13 +4,14 @@
 __description__ = 'multi-threaded suricata search module for MISP'
 __author__ = 'raw-data'
 __version__ = '0.0.1'
-__date__ = '2017.06.28'
+__date__ = '2017.07.03'
 
 
 """
     Use at your own risk
 
         2017.06.28  start
+        2017.07.03  fixed args.quiet and status msgs
 
 """
 
@@ -162,7 +163,9 @@ def format_request(param, term, misp, quiet, output, thread, noevent):
 
     kwargs = {param: term}
 
-    print ("[+] Searching for: {}".format(kwargs))
+    if not quiet:
+        print ("[+] Searching for: {}".format(kwargs))
+
     search(misp, quiet, noevent, **kwargs)
 
     # collect Suricata rules
@@ -193,7 +196,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    if args.output is not None and os.path.exists(args.output):
+    if args.output is not None and os.path.exists(args.output) and args.quiet is None:
         try:
             check = input("[!] Output file {} exists, do you want to continue [Y/n]? ".format(args.output))
             if check not in ["Y","y"]:
@@ -203,8 +206,7 @@ if __name__ == "__main__":
 
     if not args.quiet:
         print ("[i] Connecting to MISP instance: {}".format(misp_url))
-
-    print ("[i] Note: duplicated IDS rules will be removed")
+        print ("[i] Note: duplicated IDS rules will be removed")
 
     # Based on # of terms, format request
     if "," in args.search:
@@ -213,9 +215,8 @@ if __name__ == "__main__":
             misp = init()
             format_request(args.param, term, misp, args.quiet, args.output, args.thread, args.noevent)
     else:
-        if not args.quiet:
-            misp = init()
-            format_request(args.param, args.search, misp, args.quiet, args.output, args.thread, args.noevent)
+        misp = init()
+        format_request(args.param, args.search, misp, args.quiet, args.output, args.thread, args.noevent)
 
     # return collected rules
     return_rules(args.output, args.quiet)
