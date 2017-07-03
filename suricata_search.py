@@ -196,7 +196,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    if args.output is not None and os.path.exists(args.output) and args.quiet is None:
+    if args.output is not None and os.path.exists(args.output) and not args.quiet:
         try:
             check = input("[!] Output file {} exists, do you want to continue [Y/n]? ".format(args.output))
             if check not in ["Y","y"]:
